@@ -17,7 +17,7 @@ COMMON=(
 )
 
 echo "logic tests"
-swiftc "${COMMON[@]}" -parse-as-library -o /tmp/taber-logic-tests \
+swiftc "${COMMON[@]}" -parse-as-library -o /tmp/Taber-logic-tests \
   Taber/Support/DisplayLayout.swift \
   Taber/Support/Shortcut.swift \
   Taber/Support/MRU.swift \
@@ -25,7 +25,7 @@ swiftc "${COMMON[@]}" -parse-as-library -o /tmp/taber-logic-tests \
   Taber/Support/ThumbnailSizing.swift \
   Taber/Windows/InventoryAssembler.swift \
   Tests/LogicTests.swift
-/tmp/taber-logic-tests
+/tmp/Taber-logic-tests
 
 echo "app"
 APP="build/Taber.app"

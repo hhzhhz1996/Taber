@@ -12,9 +12,11 @@ macOS 上的窗口切换器。按住 Command+Tab 循环窗口，松开 Command �
 xcode-select --install
 ```
 
-克隆后在仓库根目录执行：
+然后：
 
 ```bash
+git clone https://github.com/hhzhhz1996/Taber.git
+cd Taber
 ./build.sh
 open build/Taber.app
 ```
