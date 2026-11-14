@@ -37,6 +37,14 @@ enum LogicTests {
         check(ShortcutMatcher.isReverse([command, .shift]), "Shift 表示反向")
         check(!ShortcutMatcher.requiredStillHeld([], shortcut: shortcut), "松开 Command 视为确认")
         check(ShortcutText.describe(shortcut) == "⌘⇥", "默认快捷键文案")
+        let searchable = [
+            SwitchItem(id: "w-1", kind: .window(1), pid: 1, appName: "微信", title: "文件传输助手", badge: "", icon: nil, bundleURL: nil),
+            SwitchItem(id: "w-2", kind: .window(2), pid: 2, appName: "Cursor", title: "Cursor Agents", badge: "", icon: nil, bundleURL: nil),
+        ]
+        check(SwitcherQuery.filter(searchable, query: " 微 ").map(\.id) == ["w-1"], "按应用名筛选")
+        check(SwitcherQuery.filter(searchable, query: "agents").map(\.id) == ["w-2"], "按窗口标题筛选")
+        check(SwitcherQuery.filter(searchable, query: "").count == 2, "空白筛选保留全部")
+        check(SwitcherTyping.character(for: 13) == "w", "W 键可以输入筛选")
 
         let order = MRUOrder.orderedWindowIDs(zOrderFrontToBack: [1, 2, 3], mru: [2, 1], extras: [4])
         check(order == [2, 1, 3, 4], "最近使用优先，其余按 Z 序，最小化在后")

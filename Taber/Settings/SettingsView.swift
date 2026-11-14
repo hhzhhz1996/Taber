@@ -17,7 +17,7 @@ struct SettingsView: View {
                     Button("取消") { store.endRecording() }
                 }
             }
-            Text("默认是 Command+Tab，会盖过系统的应用切换。按住修饰键再按主键开始循环。Shift 始终表示反向。松开修饰键确认，Esc 取消。")
+            Text("默认是 Command+Tab，会盖过系统的应用切换。点一下切到上一个窗口，按住再按主键才打开面板。Shift 始终表示反向。面板里可以打字筛选，⌘W 关闭，⌘M 最小化。松开修饰键确认，Esc 取消。")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

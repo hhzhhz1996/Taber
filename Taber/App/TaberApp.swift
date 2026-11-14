@@ -30,6 +30,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         installMainMenu()
         controller = SwitcherController(inventory: inventory, thumbnails: thumbnails, settings: settings)
         hotkey = HotkeyMonitor(settings: settings, controller: controller)
+        controller.onVisibilityChange = { [weak hotkey] visible in
+            hotkey?.setPanelVisible(visible)
+        }
         inventory.start()
         installStatusItem()
         hotkey.start()

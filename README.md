@@ -1,6 +1,6 @@
 # Taber
 
-macOS 上的窗口切换器。按住 Command+Tab 循环窗口，松开 Command 确认，Esc 取消。每个窗口单独一项，面板出现在光标所在的屏幕中央。
+macOS 上的窗口切换器。点一下 Command+Tab 切到上一个窗口；按住再按 Tab 才打开面板。面板里可以打字筛选，⌘W 关闭，⌘M 最小化。松开 Command 确认，Esc 取消。每个窗口单独一项，面板出现在光标所在的屏幕中央。
 
 需要 macOS 14 或更高版本，以及 Apple 芯片。
 

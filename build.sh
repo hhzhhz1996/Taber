@@ -23,6 +23,7 @@ swiftc "${COMMON[@]}" -parse-as-library -o /tmp/Taber-logic-tests \
   Taber/Support/MRU.swift \
   Taber/Support/TrayMenu.swift \
   Taber/Support/ThumbnailSizing.swift \
+  Taber/Support/SwitcherQuery.swift \
   Taber/Windows/InventoryAssembler.swift \
   Tests/LogicTests.swift
 /tmp/Taber-logic-tests
@@ -49,7 +50,8 @@ swiftc "${COMMON[@]}" -parse-as-library -O -o "$APP/Contents/MacOS/Taber" \
   Taber/Support/Shortcut.swift \
   Taber/Support/MRU.swift \
   Taber/Support/TrayMenu.swift \
-  Taber/Support/ThumbnailSizing.swift
+  Taber/Support/ThumbnailSizing.swift \
+  Taber/Support/SwitcherQuery.swift
 mkdir -p "$APP/Contents/Resources"
 cp Taber/Info.plist "$APP/Contents/Info.plist"
 cp Taber/Assets/Taber.icns "$APP/Contents/Resources/Taber.icns"

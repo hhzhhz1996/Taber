@@ -1,31 +1,64 @@
 import AppKit
+import Combine
 import CoreGraphics
 
 final class HotkeyMonitor {
     private let settings: SettingsStore
     private let controller: SwitcherController
+    private let state = HotkeyState()
     private var machPort: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-    private var latestFlags: NSEvent.ModifierFlags = []
-    private var session = 0
-    private var sessionArmed = false
-    private var sessionForward = true
-    private var queuedMoves = 0
+    private var eventRunLoop: CFRunLoop?
+    private var eventThread: Thread?
+    private var settingsSink: AnyCancellable?
+    private var holdWork: DispatchWorkItem?
+    private var holding = false
+    private var holdForward = true
 
     init(settings: SettingsStore, controller: SwitcherController) {
         self.settings = settings
         self.controller = controller
+        settingsSink = settings.objectWillChange.sink { [weak self] _ in
+            DispatchQueue.main.async { self?.mirrorSettings() }
+        }
+        mirrorSettings()
+    }
+
+    func setPanelVisible(_ visible: Bool) {
+        state.setPanelVisible(visible)
     }
 
     func start() {
-        guard machPort == nil else { return }
+        guard eventThread == nil else { return }
         guard Permissions.accessibilityGranted else { return }
+        mirrorSettings()
+        let thread = Thread { [weak self] in
+            self?.runEventLoop()
+        }
+        thread.name = "TaberHotkeys"
+        eventThread = thread
+        thread.start()
+    }
+
+    func stop() {
+        if let machPort {
+            CGEvent.tapEnable(tap: machPort, enable: false)
+        }
+        if let eventRunLoop {
+            CFRunLoopStop(eventRunLoop)
+        }
+        eventThread = nil
+        machPort = nil
+        runLoopSource = nil
+        eventRunLoop = nil
+    }
+
+    private func runEventLoop() {
         let mask = (1 << CGEventType.keyDown.rawValue)
             | (1 << CGEventType.keyUp.rawValue)
             | (1 << CGEventType.flagsChanged.rawValue)
-        // Command+Tab 在窗口服务器里触发系统切换器。HID 层更靠前，先吞掉按键系统就收不到。
         let locations: [CGEventTapLocation] = [.cghidEventTap, .cgSessionEventTap]
-        let tap = locations.lazy.compactMap { location in
+        guard let tap = locations.lazy.compactMap({ location in
             CGEvent.tapCreate(
                 tap: location,
                 place: .headInsertEventTap,
@@ -34,24 +67,15 @@ final class HotkeyMonitor {
                 callback: HotkeyMonitor.callback,
                 userInfo: Unmanaged.passUnretained(self).toOpaque()
             )
-        }.first
-        guard let tap else { return }
+        }).first else { return }
         machPort = tap
         let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
         runLoopSource = source
-        CFRunLoopAddSource(CFRunLoopGetMain(), source, .commonModes)
+        let loop = CFRunLoopGetCurrent()
+        eventRunLoop = loop
+        CFRunLoopAddSource(loop, source, .commonModes)
         CGEvent.tapEnable(tap: tap, enable: true)
-    }
-
-    func stop() {
-        if let machPort {
-            CGEvent.tapEnable(tap: machPort, enable: false)
-        }
-        if let runLoopSource {
-            CFRunLoopRemoveSource(CFRunLoopGetMain(), runLoopSource, .commonModes)
-        }
-        machPort = nil
-        runLoopSource = nil
+        CFRunLoopRun()
     }
 
     fileprivate func handle(type: CGEventType, event: CGEvent) -> Bool {
@@ -61,103 +85,135 @@ final class HotkeyMonitor {
             }
             return false
         }
-
+        let snapshot = state.snapshot()
+        if snapshot.recording { return false }
         let flags = event.flags.deviceModifiers
-        latestFlags = flags
-        if settings.isRecordingShortcut {
-            return false
-        }
 
-        let shortcut = settings.shortcut
-        let active = controller.isVisible || sessionArmed
         if type == .flagsChanged {
-            if sessionArmed && !ShortcutMatcher.requiredStillHeld(flags, shortcut: shortcut) {
-                let activeSession = session
-                sessionArmed = false
-                DispatchQueue.main.async { [weak self] in
-                    guard let self, self.session == activeSession else { return }
-                    if self.controller.isVisible {
-                        self.controller.confirm()
-                    }
-                }
+            DispatchQueue.main.async { [weak self] in
+                self?.modifierChanged(flags)
             }
             return false
         }
-
         guard type == .keyDown || type == .keyUp else { return false }
         let keyCode = UInt16(event.getIntegerValueField(.keyboardEventKeycode))
-
-        if active && type == .keyDown && keyCode == 53 {
-            session += 1
-            sessionArmed = false
-            queuedMoves = 0
-            DispatchQueue.main.async { [weak self] in
-                self?.controller.cancel()
-            }
-            return true
-        }
-
-        let trigger = keyCode == shortcut.keyCode
-        if active && trigger && type == .keyDown && ShortcutMatcher.requiredStillHeld(flags, shortcut: shortcut) {
-            let forward = !ShortcutMatcher.isReverse(flags)
-            if controller.isVisible {
+        if snapshot.panelVisible {
+            if type == .keyDown {
                 DispatchQueue.main.async { [weak self] in
-                    self?.controller.cycle(forward: forward)
+                    self?.panelKey(keyCode, flags: flags)
                 }
-            } else if sessionArmed {
-                queuedMoves += forward ? 1 : -1
-            } else {
-                arm(forward: forward)
             }
             return true
         }
-
-        if active && (type == .keyDown || type == .keyUp) {
+        if type == .keyDown && ShortcutMatcher.matches(keyCode: keyCode, flags: flags, shortcut: snapshot.shortcut) {
+            let forward = !ShortcutMatcher.isReverse(flags)
+            DispatchQueue.main.async { [weak self] in
+                self?.trigger(forward: forward)
+            }
             return true
         }
-
-        if type == .keyDown && ShortcutMatcher.matches(keyCode: keyCode, flags: flags, shortcut: shortcut) {
-            arm(forward: !ShortcutMatcher.isReverse(flags))
-            return true
-        }
-
         return false
     }
 
-    private func arm(forward: Bool) {
-        session += 1
-        sessionArmed = true
-        sessionForward = forward
-        queuedMoves = 0
-        let activeSession = session
-        DispatchQueue.main.async { [weak self] in
-            guard let self, self.session == activeSession else { return }
-            self.controller.show(forward: self.sessionForward)
-            guard self.controller.isVisible else {
-                self.sessionArmed = false
-                self.queuedMoves = 0
-                return
-            }
-            self.applyQueuedMoves()
-            if !self.sessionArmed {
-                self.controller.confirm()
-            }
+    private func trigger(forward: Bool) {
+        if controller.isVisible {
+            controller.cycle(forward: forward)
+            return
+        }
+        if holding {
+            holdWork?.cancel()
+            holdWork = nil
+            holding = false
+            controller.show(forward: holdForward)
+            controller.cycle(forward: forward)
+            return
+        }
+        holding = true
+        holdForward = forward
+        let work = DispatchWorkItem { [weak self] in
+            guard let self, self.holding else { return }
+            self.holding = false
+            self.controller.show(forward: forward)
+        }
+        holdWork = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: work)
+    }
+
+    private func modifierChanged(_ flags: NSEvent.ModifierFlags) {
+        let shortcut = state.snapshot().shortcut
+        guard !ShortcutMatcher.requiredStillHeld(flags, shortcut: shortcut) else { return }
+        holdWork?.cancel()
+        holdWork = nil
+        if controller.isVisible {
+            holding = false
+            controller.confirm()
+        } else if holding {
+            holding = false
+            controller.quickSwitch(forward: holdForward)
         }
     }
 
-    private func applyQueuedMoves() {
-        let moves = queuedMoves
-        queuedMoves = 0
-        if moves > 0 {
-            for _ in 0..<moves { controller.cycle(forward: true) }
-        } else if moves < 0 {
-            for _ in 0..<(-moves) { controller.cycle(forward: false) }
+    private func panelKey(_ keyCode: UInt16, flags: NSEvent.ModifierFlags) {
+        let shortcut = state.snapshot().shortcut
+        if keyCode == 53 {
+            if controller.clearQueryIfNeeded() { return }
+            controller.cancel()
+            return
         }
+        if keyCode == 51 {
+            controller.deleteQueryCharacter()
+            return
+        }
+        if keyCode == shortcut.keyCode && ShortcutMatcher.requiredStillHeld(flags, shortcut: shortcut) {
+            controller.cycle(forward: !ShortcutMatcher.isReverse(flags))
+            return
+        }
+        if flags.contains(.command), keyCode == 13 {
+            controller.closeSelected()
+            return
+        }
+        if flags.contains(.command), keyCode == 46 {
+            controller.minimizeSelected()
+            return
+        }
+        guard !flags.contains(.option), !flags.contains(.control),
+              let character = SwitcherTyping.character(for: keyCode) else { return }
+        controller.appendQuery(character)
+    }
+
+    private func mirrorSettings() {
+        state.set(shortcut: settings.shortcut, recording: settings.isRecordingShortcut)
     }
 
     private static let callback: CGEventTapCallBack = { _, type, event, userInfo in
         guard let userInfo else { return Unmanaged.passUnretained(event) }
         let monitor = Unmanaged<HotkeyMonitor>.fromOpaque(userInfo).takeUnretainedValue()
         return monitor.handle(type: type, event: event) ? nil : Unmanaged.passUnretained(event)
+    }
+}
+
+private final class HotkeyState {
+    private let lock = NSLock()
+    private var shortcut = Shortcut.default
+    private var recording = false
+    private var panelVisible = false
+
+    func set(shortcut: Shortcut, recording: Bool) {
+        lock.lock()
+        self.shortcut = shortcut
+        self.recording = recording
+        lock.unlock()
+    }
+
+    func setPanelVisible(_ visible: Bool) {
+        lock.lock()
+        panelVisible = visible
+        lock.unlock()
+    }
+
+    func snapshot() -> (shortcut: Shortcut, recording: Bool, panelVisible: Bool) {
+        lock.lock()
+        defer { lock.unlock() }
+        return (shortcut, recording, panelVisible)
     }
 }

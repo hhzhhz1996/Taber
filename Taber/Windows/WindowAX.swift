@@ -114,6 +114,20 @@ enum WindowAX {
         setBool(window, kAXFocusedAttribute, true)
     }
 
+    static func close(pid: pid_t, windowID: CGWindowID) -> Bool {
+        guard let window = element(pid: pid, windowID: windowID) else { return false }
+        var button: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(window, kAXCloseButtonAttribute as CFString, &button) == .success,
+              let button, CFGetTypeID(button) == AXUIElementGetTypeID() else { return false }
+        return AXUIElementPerformAction(button as! AXUIElement, kAXPressAction as CFString) == .success
+    }
+
+    static func minimize(pid: pid_t, windowID: CGWindowID) -> Bool {
+        guard let window = element(pid: pid, windowID: windowID) else { return false }
+        setBool(window, kAXMinimizedAttribute, true)
+        return copyBool(window, kAXMinimizedAttribute) == true
+    }
+
     static func focus(pid: pid_t, windowID: CGWindowID) {
         guard let window = element(pid: pid, windowID: windowID) else { return }
         setBool(window, kAXMinimizedAttribute, false)

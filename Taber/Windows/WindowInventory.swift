@@ -4,16 +4,29 @@ import CoreGraphics
 final class WindowInventory {
     private(set) var mru: [CGWindowID] = []
     var focusUpdatesSuspended = false
+    var warmRequest: (() -> Void)?
     private var timer: Timer?
+    private var workspaceObservers: [NSObjectProtocol] = []
+    private var cachedKey: String?
+    private var cachedAt: Date?
+    private var cachedItems: [SwitchItem]?
 
     func start() {
         timer?.invalidate()
         let timer = Timer(timeInterval: 0.4, repeats: true) { [weak self] _ in
             self?.observeFrontmost()
+            self?.warmRequest?()
         }
         RunLoop.main.add(timer, forMode: .common)
         self.timer = timer
+        observeWorkspace()
         observeFrontmost()
+    }
+
+    func invalidateCache() {
+        cachedKey = nil
+        cachedAt = nil
+        cachedItems = nil
     }
 
     func noteFocused(_ windowID: CGWindowID) {
@@ -23,9 +36,46 @@ final class WindowInventory {
         if mru.count > 80 {
             mru.removeLast(mru.count - 80)
         }
+        invalidateCache()
     }
 
     func makeItems(
+        filterScreenID: UInt32?,
+        includeMinimized: Bool,
+        includeWindowless: Bool,
+        includeFullscreen: Bool,
+        includeOtherSpaces: Bool,
+        includeDashboards: Bool,
+        includeHidden: Bool
+    ) -> [SwitchItem] {
+        let cacheKey = [
+            filterScreenID.map(String.init) ?? "-",
+            includeMinimized ? "1" : "0",
+            includeWindowless ? "1" : "0",
+            includeFullscreen ? "1" : "0",
+            includeOtherSpaces ? "1" : "0",
+            includeDashboards ? "1" : "0",
+            includeHidden ? "1" : "0",
+        ].joined(separator: "|")
+        if let cachedItems, cachedKey == cacheKey, let cachedAt, Date().timeIntervalSince(cachedAt) < 1.5 {
+            return cachedItems
+        }
+        let items = buildItems(
+            filterScreenID: filterScreenID,
+            includeMinimized: includeMinimized,
+            includeWindowless: includeWindowless,
+            includeFullscreen: includeFullscreen,
+            includeOtherSpaces: includeOtherSpaces,
+            includeDashboards: includeDashboards,
+            includeHidden: includeHidden
+        )
+        cachedKey = cacheKey
+        cachedAt = Date()
+        cachedItems = items
+        return items
+    }
+
+    private func buildItems(
         filterScreenID: UInt32?,
         includeMinimized: Bool,
         includeWindowless: Bool,
@@ -198,6 +248,24 @@ final class WindowInventory {
             includeHidden: includeHidden,
             hidden: hidden
         )
+    }
+
+    private func observeWorkspace() {
+        let names: [Notification.Name] = [
+            NSWorkspace.didLaunchApplicationNotification,
+            NSWorkspace.didTerminateApplicationNotification,
+            NSWorkspace.didHideApplicationNotification,
+            NSWorkspace.didUnhideApplicationNotification,
+            NSWorkspace.didActivateApplicationNotification,
+        ]
+        let center = NSWorkspace.shared.notificationCenter
+        for name in names {
+            workspaceObservers.append(
+                center.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                    self?.invalidateCache()
+                }
+            )
+        }
     }
 
     private func observeFrontmost() {

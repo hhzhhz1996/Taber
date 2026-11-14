@@ -65,6 +65,7 @@ struct SwitcherStripView: View {
             Text(model.hint)
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.72))
+                .lineLimit(2)
                 .padding(.horizontal, 8)
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
