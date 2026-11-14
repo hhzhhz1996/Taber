@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>zh-Hans</string>
+	<key>CFBundleDisplayName</key>
+	<string>Taber</string>
+	<key>CFBundleExecutable</key>
+	<string>Taber</string>
+	<key>CFBundleIconFile</key>
+	<string>Taber</string>
+	<key>CFBundleIdentifier</key>
+	<string>local.taber.Taber</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Taber</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSAccessibilityUsageDescription</key>
+	<string>Taber 需要辅助功能权限来监听快捷键、读取窗口，并把选中的窗口提到前面。</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Taber 需要向没有窗口的应用发送重新打开事件，以便弹出主界面。</string>
+</dict>
+</plist>

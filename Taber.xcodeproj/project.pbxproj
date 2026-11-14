@@ -1,0 +1,340 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXFileReference section */
+		AA0000000000000000000001 /* TaberApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaberApp.swift; sourceTree = "<group>"; };
+		AA0000000000000000000002 /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
+		AA0000000000000000000003 /* HotkeyMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyMonitor.swift; sourceTree = "<group>"; };
+		AA0000000000000000000004 /* WindowInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowInventory.swift; sourceTree = "<group>"; };
+		AA0000000000000000000005 /* WindowActivator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowActivator.swift; sourceTree = "<group>"; };
+		AA0000000000000000000006 /* WindowAX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAX.swift; sourceTree = "<group>"; };
+		AA0000000000000000000007 /* InventoryAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryAssembler.swift; sourceTree = "<group>"; };
+		AA0000000000000000000008 /* ThumbnailCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailCache.swift; sourceTree = "<group>"; };
+		AA0000000000000000000009 /* SwitcherPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitcherPanel.swift; sourceTree = "<group>"; };
+		AA000000000000000000000A /* SwitcherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitcherController.swift; sourceTree = "<group>"; };
+		AA000000000000000000000B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AA000000000000000000000C /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		AA000000000000000000000D /* DisplayLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayLayout.swift; sourceTree = "<group>"; };
+		AA000000000000000000000E /* Shortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcut.swift; sourceTree = "<group>"; };
+		AA000000000000000000000F /* MRU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRU.swift; sourceTree = "<group>"; };
+		AA0000000000000000000012 /* TrayMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrayMenu.swift; sourceTree = "<group>"; };
+		AA0000000000000000000013 /* ThumbnailSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailSizing.swift; sourceTree = "<group>"; };
+		AA0000000000000000000010 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA0000000000000000000011 /* Taber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taber.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BB0000000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CC0000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				CC0000000000000000000002 /* Taber */,
+				CC0000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CC0000000000000000000002 /* Taber */ = {
+			isa = PBXGroup;
+			children = (
+				CC0000000000000000000004 /* App */,
+				CC0000000000000000000005 /* Hotkey */,
+				CC0000000000000000000006 /* Windows */,
+				CC0000000000000000000007 /* Thumbnails */,
+				CC0000000000000000000008 /* Switcher */,
+				CC0000000000000000000009 /* Settings */,
+				CC000000000000000000000A /* Support */,
+				AA0000000000000000000010 /* Info.plist */,
+			);
+			path = Taber;
+			sourceTree = "<group>";
+		};
+		CC0000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000011 /* Taber.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CC0000000000000000000004 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000001 /* TaberApp.swift */,
+				AA0000000000000000000002 /* PermissionsView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		CC0000000000000000000005 /* Hotkey */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000003 /* HotkeyMonitor.swift */,
+			);
+			path = Hotkey;
+			sourceTree = "<group>";
+		};
+		CC0000000000000000000006 /* Windows */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000004 /* WindowInventory.swift */,
+				AA0000000000000000000005 /* WindowActivator.swift */,
+				AA0000000000000000000006 /* WindowAX.swift */,
+				AA0000000000000000000007 /* InventoryAssembler.swift */,
+			);
+			path = Windows;
+			sourceTree = "<group>";
+		};
+		CC0000000000000000000007 /* Thumbnails */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000008 /* ThumbnailCache.swift */,
+			);
+			path = Thumbnails;
+			sourceTree = "<group>";
+		};
+		CC0000000000000000000008 /* Switcher */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000000000000000000009 /* SwitcherPanel.swift */,
+				AA000000000000000000000A /* SwitcherController.swift */,
+			);
+			path = Switcher;
+			sourceTree = "<group>";
+		};
+		CC0000000000000000000009 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AA000000000000000000000B /* SettingsView.swift */,
+				AA000000000000000000000C /* SettingsStore.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		CC000000000000000000000A /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				AA000000000000000000000D /* DisplayLayout.swift */,
+				AA000000000000000000000E /* Shortcut.swift */,
+				AA000000000000000000000F /* MRU.swift */,
+				AA0000000000000000000012 /* TrayMenu.swift */,
+				AA0000000000000000000013 /* ThumbnailSizing.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DD0000000000000000000001 /* Taber */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE0000000000000000000003 /* Build configuration list for PBXNativeTarget "Taber" */;
+			buildPhases = (
+				BB0000000000000000000001 /* Sources */,
+				BB0000000000000000000002 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Taber;
+			productName = Taber;
+			productReference = AA0000000000000000000011 /* Taber.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FF0000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					DD0000000000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = EE0000000000000000000001 /* Build configuration list for PBXProject "Taber" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = "zh-Hans";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = CC0000000000000000000001;
+			productRefGroup = CC0000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DD0000000000000000000001 /* Taber */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BB0000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA0000000000000000000001 /* TaberApp.swift in Sources */,
+				BA0000000000000000000002 /* PermissionsView.swift in Sources */,
+				BA0000000000000000000003 /* HotkeyMonitor.swift in Sources */,
+				BA0000000000000000000004 /* WindowInventory.swift in Sources */,
+				BA0000000000000000000005 /* WindowActivator.swift in Sources */,
+				BA0000000000000000000006 /* WindowAX.swift in Sources */,
+				BA0000000000000000000007 /* InventoryAssembler.swift in Sources */,
+				BA0000000000000000000008 /* ThumbnailCache.swift in Sources */,
+				BA0000000000000000000009 /* SwitcherPanel.swift in Sources */,
+				BA000000000000000000000A /* SwitcherController.swift in Sources */,
+				BA000000000000000000000B /* SettingsView.swift in Sources */,
+				BA000000000000000000000C /* SettingsStore.swift in Sources */,
+				BA000000000000000000000D /* DisplayLayout.swift in Sources */,
+				BA000000000000000000000E /* Shortcut.swift in Sources */,
+				BA000000000000000000000F /* MRU.swift in Sources */,
+				BA0000000000000000000012 /* TrayMenu.swift in Sources */,
+				BA0000000000000000000013 /* ThumbnailSizing.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXBuildFile section */
+		BA0000000000000000000001 /* TaberApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* TaberApp.swift */; };
+		BA0000000000000000000002 /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* PermissionsView.swift */; };
+		BA0000000000000000000003 /* HotkeyMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000003 /* HotkeyMonitor.swift */; };
+		BA0000000000000000000004 /* WindowInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000004 /* WindowInventory.swift */; };
+		BA0000000000000000000005 /* WindowActivator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000005 /* WindowActivator.swift */; };
+		BA0000000000000000000006 /* WindowAX.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000006 /* WindowAX.swift */; };
+		BA0000000000000000000007 /* InventoryAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000007 /* InventoryAssembler.swift */; };
+		BA0000000000000000000008 /* ThumbnailCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000008 /* ThumbnailCache.swift */; };
+		BA0000000000000000000009 /* SwitcherPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000009 /* SwitcherPanel.swift */; };
+		BA000000000000000000000A /* SwitcherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000A /* SwitcherController.swift */; };
+		BA000000000000000000000B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000B /* SettingsView.swift */; };
+		BA000000000000000000000C /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000C /* SettingsStore.swift */; };
+		BA000000000000000000000D /* DisplayLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000D /* DisplayLayout.swift */; };
+		BA000000000000000000000E /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000E /* Shortcut.swift */; };
+		BA000000000000000000000F /* MRU.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000F /* MRU.swift */; };
+		BA0000000000000000000012 /* TrayMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000012 /* TrayMenu.swift */; };
+		BA0000000000000000000013 /* ThumbnailSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000013 /* ThumbnailSizing.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin XCBuildConfiguration section */
+		EE0000000000000000000002 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		EE0000000000000000000004 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Taber/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.taber.Taber;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		EE0000000000000000000005 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Taber/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.taber.Taber;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		EE0000000000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EE0000000000000000000001 /* Build configuration list for PBXProject "Taber" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE0000000000000000000002 /* Debug */,
+				EE0000000000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EE0000000000000000000003 /* Build configuration list for PBXNativeTarget "Taber" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE0000000000000000000004 /* Debug */,
+				EE0000000000000000000005 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FF0000000000000000000001 /* Project object */;
+}
